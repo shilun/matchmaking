@@ -61,7 +61,6 @@ public class ExecuterService {
 
                     if (buyItem.getPrice().compareTo(sellItem.getPrice()) >= 0) {
                         OrderInfo order = new OrderInfo();
-                        order.setTokenPareTypeEnum(buyItem.getTokenPareTypeEnum());
                         order.setBuyId(buyItem.getId());
                         order.setSellId(sellItem.getId());
                         order.setBuyPrice(sellItem.getPrice());

@@ -2,7 +2,6 @@ package com.lunshi.matchmaking.domain;
 
 import com.common.util.AbstractBaseEntity;
 import com.common.util.model.YesOrNoEnum;
-import com.lunshi.matchmaking.domain.module.TokenPareTypeEnum;
 import com.lunshi.matchmaking.service.dto.ItemTypeEnum;
 
 import java.math.BigDecimal;
@@ -16,10 +15,6 @@ public class ItemInfo  extends AbstractBaseEntity {
      */
     private ItemTypeEnum type;
 
-    /**
-     * 币种对
-     */
-    private TokenPareTypeEnum tokenPareTypeEnum;
 
     /**
      * 原始数量
@@ -43,14 +38,6 @@ public class ItemInfo  extends AbstractBaseEntity {
      * 状态
      */
     private YesOrNoEnum status;
-
-    public TokenPareTypeEnum getTokenPareTypeEnum() {
-        return tokenPareTypeEnum;
-    }
-
-    public void setTokenPareTypeEnum(TokenPareTypeEnum tokenPareTypeEnum) {
-        this.tokenPareTypeEnum = tokenPareTypeEnum;
-    }
 
     public BigDecimal getTotalAmount() {
         return totalAmount;

@@ -1,7 +1,6 @@
 package com.lunshi.matchmaking.domain;
 
 import com.common.util.AbstractBaseEntity;
-import com.lunshi.matchmaking.domain.module.TokenPareTypeEnum;
 
 import java.math.BigDecimal;
 
@@ -37,18 +36,6 @@ public class OrderInfo extends AbstractBaseEntity {
      */
     private BigDecimal sellPrice;
 
-    /**
-     * 货币对类型
-     */
-    private TokenPareTypeEnum tokenPareTypeEnum;
-
-    public TokenPareTypeEnum getTokenPareTypeEnum() {
-        return tokenPareTypeEnum;
-    }
-
-    public void setTokenPareTypeEnum(TokenPareTypeEnum tokenPareTypeEnum) {
-        this.tokenPareTypeEnum = tokenPareTypeEnum;
-    }
 
     public Long getBuyId() {
         return buyId;
