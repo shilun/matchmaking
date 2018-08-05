@@ -29,9 +29,9 @@
 </sql>
     <insert id="insert" parameterType="itemInfo">
         insert into item_info
-        (id,ref_type,type,total_amount,amount,price,status,del_status,create_time,update_time)
+        (id,ref_id,ref_type,type,total_amount,amount,price,status,del_status,create_time,update_time)
         values
-        (#{id},#{refType},#{type},#{totalAmount},#{amount},#{price},#{status},#{delStatus},#{createTime},#{updateTime})
+        (#{id},#{refId},#{refType},#{type},#{totalAmount},#{amount},#{price},#{status},#{delStatus},#{createTime},#{updateTime})
         <selectKey keyProperty="id" resultType="long" order="AFTER">
             select last_insert_id()
         </selectKey>
@@ -47,6 +47,7 @@
             <if test="refId != null "><![CDATA[ ref_id =#{refId},]]></if>
             <if test="refType != null "><![CDATA[ ref_type =#{refType},]]></if>
             <if test="type != null "><![CDATA[ type =#{type},]]></if>
+            <if test="amount != null "><![CDATA[ amount =#{amount},]]></if>
             <if test="status != null "><![CDATA[ status =#{status},]]></if>
             <if test="delStatus != null "><![CDATA[ del_status =#{delStatus},]]></if>
             <if test="createTime != null "><![CDATA[ create_time =#{createTime},]]></if>

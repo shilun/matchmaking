@@ -8,6 +8,7 @@ import com.lunshi.matchmaking.domain.module.ItemTypeEnum;
 import com.lunshi.matchmaking.service.ItemInfoService;
 import com.lunshi.matchmaking.service.OrderInfoService;
 import com.lunshi.matchmaking.service.ReceiverService;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -22,7 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 撮合线程
  */
 @Service
-public class MatchMakingWorker {
+public class MatchMakingWorker implements InitializingBean {
     @Resource
     private ReceiverService receiverService;
 
@@ -37,9 +38,27 @@ public class MatchMakingWorker {
     private List<ItemInfo> buys = new ArrayList();
     private List<ItemInfo> selles = new ArrayList();
 
-    private List<ItemInfo> cancleBuys=new ArrayList<>();
-    private List<ItemInfo> cancleSelles=new ArrayList<>();
+    private List<ItemInfo> cancleBuys = new ArrayList<>();
+    private List<ItemInfo> cancleSelles = new ArrayList<>();
 
+    public MatchMakingWorker() {
+
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        ItemInfo query = new ItemInfo();
+        query.setStatus(YesOrNoEnum.NO.getValue());
+        List<ItemInfo> list = itemInfoService.query(query);
+        for (ItemInfo info : list) {
+            if (ItemTypeEnum.BUY.name().equals(info.getType())) {
+                buys.add(info);
+            } else {
+                selles.add(info);
+            }
+        }
+        execute();
+    }
 
     /**
      * 二十个线程来
@@ -65,9 +84,9 @@ public class MatchMakingWorker {
      * 自动执行任务
      */
     public void execute() {
-        if (atomicBoolean.getAndSet(false)) {
-            receiverService.doExecute(buys, selles);
-            synchronized (cancleBuys){
+        if (!atomicBoolean.getAndSet(true)) {
+            receiverService.doExecute(selles,buys);
+            synchronized (cancleBuys) {
                 buys.removeAll(cancleBuys);
                 cancleBuys.clear();
             }
@@ -79,14 +98,14 @@ public class MatchMakingWorker {
                 }
             });
             selles.removeAll(cancleSelles);
-            synchronized (cancleSelles){
+            synchronized (cancleSelles) {
                 selles.removeAll(cancleSelles);
                 cancleSelles.clear();
             }
             selles.sort(new Comparator<ItemInfo>() {
                 @Override
                 public int compare(ItemInfo o1, ItemInfo o2) {
-                    return o2.getPrice().compareTo(o1.getPrice());
+                    return o1.getPrice().compareTo(o2.getPrice());
                 }
             });
             List delBuys = new ArrayList();
@@ -167,9 +186,6 @@ public class MatchMakingWorker {
                             order.setSellAmount(buyItem.getAmount());
                             order.setSellPrice(sellItem.getPrice());
 
-
-                            buyItem.setStatus(YesOrNoEnum.YES.getValue());
-                            buyItem.setAmount(BigDecimal.ZERO);
                             sellItem.setAmount(sellItem.getAmount().subtract(buyItem.getAmount()));
 
                             ItemInfo temp = new ItemInfo();
@@ -193,7 +209,7 @@ public class MatchMakingWorker {
             }
             selles.removeAll(delSels);
             buys.removeAll(delBuys);
-            atomicBoolean.set(true);
+            atomicBoolean.set(false);
         }
     }
 
