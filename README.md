@@ -6,7 +6,7 @@
 
 性能分析
 
-redis 大于 mongodb  大于 mysql
+redis 大于 mongodb  大于 mysql  本系统使用mysql作为撮合存储
 
 数据库设计图
 
