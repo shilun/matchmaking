@@ -12,3 +12,8 @@ redis 大于 mongodb  大于 mysql
 
 ![数据库设计图](images/database.png)
 
+业务接口
+
+-支持 发布撮合信息
+
+-取消 撮合信息发布

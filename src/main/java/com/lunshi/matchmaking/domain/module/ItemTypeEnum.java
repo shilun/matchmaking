@@ -1,4 +1,4 @@
-package com.lunshi.matchmaking.service.dto;
+package com.lunshi.matchmaking.domain.module;
 
 import com.common.util.IGlossary;
 

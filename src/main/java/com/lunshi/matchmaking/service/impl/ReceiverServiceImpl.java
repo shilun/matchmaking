@@ -3,8 +3,9 @@ package com.lunshi.matchmaking.service.impl;
 
 import com.common.util.GlosseryEnumUtils;
 import com.lunshi.matchmaking.domain.ItemInfo;
+import com.lunshi.matchmaking.service.ItemInfoService;
 import com.lunshi.matchmaking.service.ReceiverService;
-import com.lunshi.matchmaking.service.dto.ItemTypeEnum;
+import com.lunshi.matchmaking.domain.module.ItemTypeEnum;
 import com.lunshi.matchmaking.worker.MatchMakingWorker;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +27,16 @@ public class ReceiverServiceImpl implements ReceiverService {
     @Resource
     private MatchMakingWorker matchMakingWorker;
 
+    @Resource
+    private ItemInfoService itemInfoService;
+
     /**
      * 新增交易
      *
      * @param item
      */
     public void addItem(ItemInfo item) {
+        itemInfoService.add(item);
         ItemTypeEnum typeEnum = GlosseryEnumUtils.getItem(ItemTypeEnum.class, item.getType());
         if (ItemTypeEnum.SELL == typeEnum) {
             sells.add(item);
@@ -40,6 +45,25 @@ public class ReceiverServiceImpl implements ReceiverService {
             buys.add(item);
         }
         matchMakingWorker.execute();
+    }
+
+    @Override
+    public void cancle(Long refId, String refType, ItemTypeEnum type) {
+        ItemInfo temp = new ItemInfo();
+        temp.setRefId(refId);
+        temp.setRefType(refType);
+        temp.setType(type.name());
+        if (type == ItemTypeEnum.BUY) {
+            synchronized (buys) {
+                buys.remove(temp);
+            }
+        }
+        if (type == ItemTypeEnum.SELL) {
+            synchronized (sells) {
+                sells.remove(temp);
+            }
+        }
+        matchMakingWorker.cancle(temp);
     }
 
     /**

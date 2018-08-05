@@ -1,14 +1,17 @@
 package com.lunshi.matchmaking.worker;
 
+import com.common.util.GlosseryEnumUtils;
 import com.common.util.model.YesOrNoEnum;
 import com.lunshi.matchmaking.domain.OrderInfo;
 import com.lunshi.matchmaking.domain.ItemInfo;
+import com.lunshi.matchmaking.domain.module.ItemTypeEnum;
 import com.lunshi.matchmaking.service.ItemInfoService;
 import com.lunshi.matchmaking.service.OrderInfoService;
 import com.lunshi.matchmaking.service.ReceiverService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.mail.FetchProfile;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -34,11 +37,29 @@ public class MatchMakingWorker {
     private List<ItemInfo> buys = new ArrayList();
     private List<ItemInfo> selles = new ArrayList();
 
+    private List<ItemInfo> cancleBuys=new ArrayList<>();
+    private List<ItemInfo> cancleSelles=new ArrayList<>();
+
 
     /**
      * 二十个线程来
      */
     private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(20);
+
+
+    public void cancle(ItemInfo item) {
+        ItemTypeEnum typeEnum = GlosseryEnumUtils.getItem(ItemTypeEnum.class, item.getType());
+        if (typeEnum == ItemTypeEnum.BUY) {
+            synchronized (cancleBuys) {
+                cancleBuys.add(item);
+            }
+        }
+        if (typeEnum == ItemTypeEnum.SELL) {
+            synchronized (cancleSelles) {
+                cancleSelles.add(item);
+            }
+        }
+    }
 
     /**
      * 自动执行任务
@@ -46,12 +67,22 @@ public class MatchMakingWorker {
     public void execute() {
         if (atomicBoolean.getAndSet(false)) {
             receiverService.doExecute(buys, selles);
+            synchronized (cancleBuys){
+                buys.removeAll(cancleBuys);
+                cancleBuys.clear();
+            }
+
             buys.sort(new Comparator<ItemInfo>() {
                 @Override
                 public int compare(ItemInfo o1, ItemInfo o2) {
                     return o1.getPrice().compareTo(o2.getPrice());
                 }
             });
+            selles.removeAll(cancleSelles);
+            synchronized (cancleSelles){
+                selles.removeAll(cancleSelles);
+                cancleSelles.clear();
+            }
             selles.sort(new Comparator<ItemInfo>() {
                 @Override
                 public int compare(ItemInfo o1, ItemInfo o2) {

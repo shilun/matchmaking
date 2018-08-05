@@ -2,10 +2,8 @@ package com.lunshi.matchmaking.service;
 
 
 import com.lunshi.matchmaking.domain.ItemInfo;
-import com.lunshi.matchmaking.service.dto.ItemTypeEnum;
-import org.springframework.stereotype.Service;
+import com.lunshi.matchmaking.domain.module.ItemTypeEnum;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +17,14 @@ public interface ReceiverService {
      * @param item
      */
     public void addItem(ItemInfo item);
+
+    /**
+     * 取消撮合
+     * @param refId 参照业务标识
+     * @param refType 货币对类型
+     * @param type 卖入/卖出类型
+     */
+    public void cancle(Long refId,String refType,ItemTypeEnum type);
 
     /**
      * 对撮合接收到的数据加入撮合线程
