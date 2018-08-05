@@ -52,6 +52,7 @@ public class ReceiverController extends AbstractClientController {
      * @param type
      * @return
      */
+    @RequestMapping("cancle")
     public RPCResult<Boolean>cancle(Long refId, String refType, ItemTypeEnum type){
         return buildRPCMessage(new IExecute() {
             @Override

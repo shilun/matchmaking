@@ -10,8 +10,8 @@
         <setting name="logImpl" value="LOG4J"/>
     </settings>
     <typeAliases>
-        <typeAlias alias="TransInfo" type="com.lunshi.matchmaking.domain.ItemInfo"/>
-        <typeAlias alias="TotAnnexInfo" type="com.lunshi.matchmaking.domain.OrderInfo"/>
+        <typeAlias alias="itemInfo" type="com.lunshi.matchmaking.domain.ItemInfo"/>
+        <typeAlias alias="orderInfo" type="com.lunshi.matchmaking.domain.OrderInfo"/>
     </typeAliases>
     <mappers>
         <mapper resource="sqlmap/ItemInfo.xml"/>

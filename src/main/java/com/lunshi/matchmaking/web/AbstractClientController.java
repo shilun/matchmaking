@@ -10,8 +10,6 @@ import javax.annotation.Resource;
  */
 public abstract class AbstractClientController extends AbstractController {
 
-    @Resource
-    private static final Logger LOGGER = Logger.getLogger(AbstractClientController.class);
 
 
 }
