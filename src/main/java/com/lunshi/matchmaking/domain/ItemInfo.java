@@ -9,7 +9,13 @@ import java.math.BigDecimal;
 /**
  * 撮合对象
  */
-public class ItemInfo  extends AbstractBaseEntity {
+public class ItemInfo extends AbstractBaseEntity{
+
+
+    /**
+     * 撮合类型
+     */
+    private String refType;
     /**
      * 数据类型
      */
@@ -31,13 +37,17 @@ public class ItemInfo  extends AbstractBaseEntity {
     private BigDecimal price;
 
     /**
-     * 交易手费比例
-     */
-    private BigDecimal feePercent;
-    /**
      * 状态
      */
     private YesOrNoEnum status;
+
+    public String getRefType() {
+        return refType;
+    }
+
+    public void setRefType(String refType) {
+        this.refType = refType;
+    }
 
     public BigDecimal getTotalAmount() {
         return totalAmount;
@@ -45,14 +55,6 @@ public class ItemInfo  extends AbstractBaseEntity {
 
     public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
-    }
-
-    public BigDecimal getFeePercent() {
-        return feePercent;
-    }
-
-    public void setFeePercent(BigDecimal feePercent) {
-        this.feePercent = feePercent;
     }
 
     public ItemTypeEnum getType() {

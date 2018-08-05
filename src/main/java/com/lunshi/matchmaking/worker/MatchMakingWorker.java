@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -31,6 +33,12 @@ public class MatchMakingWorker {
 
     private List<ItemInfo> buys = new ArrayList();
     private List<ItemInfo> selles = new ArrayList();
+
+
+    /**
+     * 二十个线程来
+     */
+    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(20);
 
     /**
      * 自动执行任务
