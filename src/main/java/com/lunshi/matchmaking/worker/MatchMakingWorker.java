@@ -84,7 +84,7 @@ public class MatchMakingWorker {
                             order.setSellAmount(sellItem.getAmount());
                             order.setSellPrice(sellItem.getPrice());
 
-                            sellItem.setStatus(YesOrNoEnum.YES);
+                            sellItem.setStatus(YesOrNoEnum.YES.getValue());
                             //更新当前广告数量
                             buyItem.setAmount(buyItem.getAmount().subtract(sellItem.getAmount()));
                             //更新当前卖
@@ -93,7 +93,7 @@ public class MatchMakingWorker {
                             //更新sell信息
                             ItemInfo temp = new ItemInfo();
                             temp.setId(sellItem.getId());
-                            temp.setStatus(YesOrNoEnum.YES);
+                            temp.setStatus(YesOrNoEnum.YES.getValue());
                             temp.setAmount(BigDecimal.ZERO);
                             itemInfoService.save(temp);
 
@@ -110,14 +110,14 @@ public class MatchMakingWorker {
                             order.setSellPrice(sellItem.getPrice());
 
                             buyItem.setAmount(BigDecimal.ZERO);
-                            buyItem.setStatus(YesOrNoEnum.YES);
+                            buyItem.setStatus(YesOrNoEnum.YES.getValue());
                             sellItem.setAmount(BigDecimal.ZERO);
-                            sellItem.setStatus(YesOrNoEnum.YES);
+                            sellItem.setStatus(YesOrNoEnum.YES.getValue());
 
 
                             ItemInfo temp = new ItemInfo();
                             temp.setId(sellItem.getId());
-                            temp.setStatus(YesOrNoEnum.YES);
+                            temp.setStatus(YesOrNoEnum.YES.getValue());
                             temp.setAmount(BigDecimal.ZERO);
                             itemInfoService.save(temp);
 
@@ -125,7 +125,7 @@ public class MatchMakingWorker {
                             temp = new ItemInfo();
                             temp.setId(buyItem.getId());
                             temp.setAmount(BigDecimal.ZERO);
-                            temp.setStatus(YesOrNoEnum.YES);
+                            temp.setStatus(YesOrNoEnum.YES.getValue());
                             itemInfoService.save(temp);
 
                             delBuys.add(buyItem);
@@ -137,7 +137,7 @@ public class MatchMakingWorker {
                             order.setSellPrice(sellItem.getPrice());
 
 
-                            buyItem.setStatus(YesOrNoEnum.YES);
+                            buyItem.setStatus(YesOrNoEnum.YES.getValue());
                             buyItem.setAmount(BigDecimal.ZERO);
                             sellItem.setAmount(sellItem.getAmount().subtract(buyItem.getAmount()));
 
@@ -150,11 +150,11 @@ public class MatchMakingWorker {
                             temp = new ItemInfo();
                             temp.setId(buyItem.getId());
                             temp.setAmount(BigDecimal.ZERO);
-                            temp.setStatus(YesOrNoEnum.YES);
+                            temp.setStatus(YesOrNoEnum.YES.getValue());
                             itemInfoService.save(temp);
                             delBuys.add(buyItem);
                         }
-                        orderInfoService.insert(order);
+                        orderInfoService.save(order);
                     } else {
                         break;
                     }
