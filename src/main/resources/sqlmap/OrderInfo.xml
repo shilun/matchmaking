@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lunshi.matchmaking.dao.OrderInfoDao">
+<sql id="limit">
+	<if test="startRow != null and endRow !=null">limit #{startRow},#{endRow}</if>
+</sql>	
+<sql id="orderCondition">
+	<if test="orderColumn != null and orderColumn != ''">ORDER BY ${orderColumn} </if>
+</sql>
+
+<sql id="Condition">
+	<where>
+		<if test="id != null "><![CDATA[AND id =#{id}]]></if>		
+		<if test="buyId != null "><![CDATA[AND buy_id =#{buyId}]]></if>		
+		<if test="buyAmount != null "><![CDATA[AND buy_amount =#{buyAmount}]]></if>		
+		<if test="buyPrice != null "><![CDATA[AND buy_price =#{buyPrice}]]></if>		
+		<if test="sellId != null "><![CDATA[AND sell_id =#{sellId}]]></if>		
+		<if test="sellAmount != null "><![CDATA[AND sell_amount =#{sellAmount}]]></if>		
+		<if test="sellPrice != null "><![CDATA[AND sell_price =#{sellPrice}]]></if>		
+		<if test="delStatus != null "><![CDATA[AND del_status =#{delStatus}]]></if>		
+		<if test="createTime != null "><![CDATA[AND create_time =#{createTime}]]></if>		
+		<if test="updateTime != null "><![CDATA[AND update_time =#{updateTime}]]></if>		
+	</where>
+</sql>
+<sql id="columns">
+	id as id ,buy_id as buyId ,buy_amount as buyAmount ,buy_price as buyPrice ,sell_id as sellId ,sell_amount as sellAmount ,sell_price as sellPrice ,del_status as delStatus ,create_time as createTime ,update_time as updateTime 
+</sql>
+<insert id="insert" parameterType="orderInfo">
+  	insert into order_info
+  	(id,buy_id,buy_amount,buy_price,sell_id,sell_amount,sell_price,del_status,create_time,update_time)
+  	values
+  	(#{id},#{buyId},#{buyAmount},#{buyPrice},#{sellId},#{sellAmount},#{sellPrice},#{delStatus},#{createTime},#{updateTime})
+ 	<selectKey keyProperty="id" resultType="long" order="AFTER">
+        select last_insert_id()
+    </selectKey>
+</insert>
+
+<delete id="del" parameterType="long">  
+    update  order_info set del_status=2,update_Time=now() where id = #{id}
+</delete> 
+  
+<update id="update" parameterType="orderInfo">
+	update order_info 
+  	<set>
+  				<if test="buyId != null "><![CDATA[ buy_id =#{buyId},]]></if>		
+  				<if test="sellId != null "><![CDATA[ sell_id =#{sellId},]]></if>		
+  				<if test="delStatus != null "><![CDATA[ del_status =#{delStatus},]]></if>		
+  				<if test="createTime != null "><![CDATA[ create_time =#{createTime},]]></if>		
+  				<if test="updateTime != null "><![CDATA[ update_time =#{updateTime},]]></if>		
+  	</set> 
+    where  id=#{id}
+  </update> 
+  <select id="queryCount" parameterType="orderInfo" resultType="int">
+        select count(1) from order_info 
+        <include refid="Condition"/>
+  </select> 
+  <select id="query" parameterType="orderInfo" resultType="orderInfo">
+        select 
+         <include refid="columns"/>
+		from order_info 
+        <include refid="Condition"/>
+	<include refid="orderCondition"/>
+        <include refid="limit"/>        
+  </select> 
+  </mapper>
