@@ -61,11 +61,6 @@ public class ReceiverController extends AbstractClientController {
      * @return
      */
     @ApiOperation(value = "取消撮合")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "refId", value = "业务标识", required = true, dataType = "Long"),
-            @ApiImplicitParam(name = "refType", value = "货币对类型", required = true, dataType = "String", example = "USDT_BTC"),
-            @ApiImplicitParam(name = "type", value = "货币操作类型", required = true, dataType = "com.lunshi.matchmaking.domain.module.ItemTypeEnum")
-    })
     @RequestMapping("cancle")
     public RPCResult<Boolean> cancle(@RequestParam("refId") Long refId, @RequestParam("refType") String refType, @RequestParam("type") ItemTypeEnum type) {
         return buildRPCMessage(new IExecute() {
