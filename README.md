@@ -9,5 +9,6 @@
 redis 大于 mongodb  大于 mysql
 
 数据库设计图
+
 ![数据库设计图](images/database.png)
 
